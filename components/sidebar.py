@@ -9,21 +9,18 @@ def render_sidebar():
     with st.sidebar:
         st.header("⚙️ Pengaturan")
         
-        # 1. Gaya Bahasa Selector
         st.subheader("Gaya Bahasa AI")
         st.session_state.style = st.selectbox(
             "Pilih gaya respons:",
             ["Formal", "Santai", "Profesional"],
-            index=1 # Default Santai
+            index=1
         )
         
         st.divider()
         
-        # 2. Daily Goals Tracker
         st.subheader("🎯 Daily Goals")
         today_goals = GoalsTracker.get_today_goals()
         
-        # Add new goal form
         if len(today_goals) < 3:
             with st.form("add_goal_form", clear_on_submit=True):
                 new_goal = st.text_input("Tambah goal hari ini...")
@@ -35,12 +32,10 @@ def render_sidebar():
                     else:
                         st.error(msg)
         
-        # Progress Bar
         achieved, total = GoalsTracker.get_progress()
         if total > 0:
             st.progress(achieved / total, text=f"{achieved}/{total} Goals Tercapai")
             
-        # List goals
         for goal in today_goals:
             col1, col2 = st.columns([0.1, 0.9])
             with col1:
@@ -56,14 +51,14 @@ def render_sidebar():
 
         st.divider()
         
-        # 3. Task Management (Quick View)
         st.subheader("📋 Tasks")
         tasks = TaskManager.list_tasks("pending")
         st.caption(f"{len(tasks)} tasks pending")
+        for t in tasks:
+            st.markdown(f"- {t['title']} (Due: {t['due_date']})")
         
         st.divider()
         
-        # 4. Quick Notes
         st.subheader("📝 Quick Notes")
         with st.form("add_note_form", clear_on_submit=True):
             new_note = st.text_input("Catat sesuatu...")
@@ -80,7 +75,6 @@ def render_sidebar():
 
         st.divider()
         
-        # 5. Productivity Features
         st.subheader("🚀 Productivity")
         
         if st.button("Generate Weekly Review", use_container_width=True):
@@ -91,7 +85,6 @@ def render_sidebar():
                 
         if st.button("Minta Tips AI", use_container_width=True):
             with st.spinner("Memikirkan tips..."):
-                # Get metrics
                 tasks_today = TaskManager.get_tasks()
                 completed = len([t for t in tasks_today if t["status"] == "completed"])
                 achieved, _ = GoalsTracker.get_progress()

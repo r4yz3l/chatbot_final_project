@@ -11,18 +11,22 @@ def get_ai_response(prompt: str, system_instruction: str, style: str, temperatur
     """
     temp = temperature if temperature is not None else GENERATION_CONFIG["temperature"]
     
-    response = client.models.generate_content(
-        model=MODEL_NAME,
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            system_instruction=f"{system_instruction}\n\nGaya bahasa: {style}",
-            temperature=temp,
-            top_p=GENERATION_CONFIG["top_p"],
-            top_k=GENERATION_CONFIG["top_k"],
-            max_output_tokens=GENERATION_CONFIG["max_output_tokens"],
-        ),
-    )
-    return response.text
+    try:
+        response = client.models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=f"{system_instruction}\n\nGaya bahasa: {style}",
+                temperature=temp,
+                top_p=GENERATION_CONFIG["top_p"],
+                top_k=GENERATION_CONFIG["top_k"],
+                max_output_tokens=GENERATION_CONFIG["max_output_tokens"],
+            ),
+        )
+        return response.text
+    except Exception as e:
+        print(f"Gemini API Error: {e}")
+        return f"⚠️ **Server AI sedang sibuk/penuh (Error 503)**.\n\nSistem Google Gemini saat ini sedang melayani terlalu banyak permintaan. Silakan tunggu beberapa detik dan coba lagi, atau Anda bisa mengubah `MODEL_NAME` di file `config.py` kembali ke `gemini-2.5-flash`."
 
 def parse_task_intent(user_input: str) -> dict:
     """
@@ -52,7 +56,15 @@ def parse_task_intent(user_input: str) -> dict:
         if clean_response.endswith("```"):
             clean_response = clean_response[:-3]
             
-        return json.loads(clean_response.strip())
+        parsed = json.loads(clean_response.strip())
+        
+        # If AI returned a list instead of dict, extract the first element
+        if isinstance(parsed, list) and len(parsed) > 0:
+            return parsed[0]
+        elif isinstance(parsed, dict):
+            return parsed
+        else:
+            return {"action": "error", "message": "Gagal memahami maksud task (format salah)."}
     except Exception as e:
         print(f"Failed to parse task intent: {e}, Response: {response}")
         return {"action": "error", "message": "Gagal memahami maksud task."}

@@ -1,16 +1,15 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+load_dotenv(env_path, override=True)
 
-# Load from environment or Streamlit secrets
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Will use gemini-2.5-flash as the fast/lite model for genai sdk
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "gemini-3-flash-preview"
 
 GENERATION_CONFIG = {
-    "temperature": 0.7,        # Balanced creativity
+    "temperature": 0.7,        
     "top_p": 0.9,
     "top_k": 40,
     "max_output_tokens": 1024,

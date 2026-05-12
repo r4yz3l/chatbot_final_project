@@ -4,8 +4,6 @@ from utils.task_manager import TaskManager
 from utils.goals_tracker import GoalsTracker
 
 def handle_user_input(prompt: str):
-    # Determine intent using AI
-    # This checks if the user wants to manage tasks
     task_intent = parse_task_intent(prompt)
     
     if task_intent.get("action") == "add":
@@ -36,7 +34,6 @@ def handle_user_input(prompt: str):
             return f"🗑️ Task dihapus: **{title}**"
         return f"❌ Tidak menemukan task dengan nama: **{title}**"
 
-    # Specific prompts detection (fallback rules)
     lower_prompt = prompt.lower()
     if "tips" in lower_prompt and "produktivitas" in lower_prompt:
         tasks = TaskManager.get_tasks()
@@ -44,7 +41,6 @@ def handle_user_input(prompt: str):
         achieved, _ = GoalsTracker.get_progress()
         return get_productivity_tips(completed, len(tasks), achieved, "User meminta tips secara manual.", st.session_state.style)
         
-    # Standard conversation
     return get_ai_response(
         prompt, 
         "Kamu adalah AI Personal Assistant yang cerdas, suportif, dan selalu siap membantu mengelola produktivitas.", 
@@ -55,21 +51,18 @@ def render_chat():
     st.title("🤖 Personal Assistant AI")
     st.caption("Kelola tugas, set goals, dan dapatkan insight produktivitas dari AI!")
     
-    # Display chat history
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
             
-    # Input
     if prompt := st.chat_input("Apa yang ingin kamu kelola hari ini?"):
-        # Display user msg
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
             
-        # Assistant response
         with st.chat_message("assistant"):
             with st.spinner("Memproses..."):
                 response = handle_user_input(prompt)
                 st.markdown(response)
                 st.session_state.messages.append({"role": "assistant", "content": response})
+        st.rerun()
