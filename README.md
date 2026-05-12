@@ -56,6 +56,10 @@ Buat sebuah file bernama `.env` di folder utama aplikasi dan masukkan API Key An
 GEMINI_API_KEY=KUNCI_API_ANDA_DI_SINI
 ```
 
+> **Catatan Penggunaan Model:**
+> Jika Anda mengalami *Error 503 (Model is currently experiencing high demand)*, ini berarti server Google sedang penuh. Anda bisa mengganti nama model yang digunakan (`MODEL_NAME`) di dalam file `config.py`.
+> Untuk daftar lengkap model terbaru yang tersedia, Anda bisa mengecek dokumentasi resmi di [ai.google.dev/gemini-api/docs/models/gemini](https://ai.google.dev/gemini-api/docs/models/gemini).
+
 ### 4. Jalankan Aplikasi
 Gunakan Streamlit untuk menjalankan server secara lokal:
 ```bash
