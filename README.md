@@ -18,7 +18,7 @@ Sebuah aplikasi asisten produktivitas pribadi berbasis AI yang dibangun mengguna
 ## 📂 Struktur Proyek
 
 ```text
-productivity-assistant/
+chatbot_final_project/
 ├── app.py                 # File utama aplikasi Streamlit
 ├── config.py              # Konfigurasi & Inisialisasi API Gemini
 ├── .env                   # Tempat menyimpan API Key yang aman (di-ignore Git)
@@ -44,8 +44,8 @@ Pastikan Anda telah menginstal **Python 3.10+** di sistem Anda.
 ### 2. Instalasi
 Clone repository ini, masuk ke folder proyek, dan instal dependensi yang dibutuhkan:
 ```bash
-git clone https://github.com/USERNAME_ANDA/NAMA_REPO_ANDA.git
-cd productivity-assistant
+git clone https://github.com/r4yz3l/chatbot_final_project
+cd chatbot_final_project
 pip install -r requirements.txt
 ```
 
