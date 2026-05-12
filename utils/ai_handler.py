@@ -37,8 +37,10 @@ def parse_task_intent(user_input: str) -> dict:
     Parse input berikut menjadi JSON aksi task management.
     Input: "{user_input}"
     
+    PENTING: Jika input BUKAN perintah untuk mengelola task (misalnya pengguna hanya bertanya, minta tips, atau ngobrol biasa), kembalikan action "chat".
+    
     Return JSON dengan format:
-    {{"action": "add|list|complete|delete", "title": "...", "due_date": "YYYY-MM-DD or null"}}
+    {{"action": "add|list|complete|delete|chat", "title": "...", "due_date": "YYYY-MM-DD or null"}}
     
     Hanya return JSON, tanpa penjelasan tambahan.
     """
